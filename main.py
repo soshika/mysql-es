@@ -12,7 +12,7 @@ db = mysql.connector.connect(
 
 def get_10_admins():
     cursor = db.cursor()
-    cursor.execute("SELECT id FROM users WHERE is_admin=1 LIMIT 10;")
+    cursor.execute("SELECT id FROM users WHERE is_admin=1 ORDER BY rand() LIMIT 10;")
     users = cursor.fetchall()
     ids = [user[0] for user in users]
     return ids

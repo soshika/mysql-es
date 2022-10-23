@@ -9,28 +9,20 @@ db = mysql.connector.connect(
   database="blogs"
 )
 
-if __name__ == "__main__":
-    
+
+def get_10_admins():
     cursor = db.cursor()
-    # sql = "SELECT * FROM users ;"
-    # val = ("John", "Highway 21")
-    # cursor.execute(sql, val)
-
-    # db.commit()
-
-    # print(cursor.rowcount, "record inserted.")
-
-
-    cursor.execute("SELECT * FROM users WHERE is_admin=1 LIMIT 10;")
-
+    cursor.execute("SELECT id FROM users WHERE is_admin=1 LIMIT 10;")
     users = cursor.fetchall()
-
-    for user in users:
-        print(user)
-
+    ids = [user[0] for user in users]
+    return ids
 
 
+if __name__ == "__main__":
 
+    admin_ids = get_10_admins()
+    for id in admin_ids:
+        print(id)
 
     # fake = Faker('fa_IR')
     # name = fake.name()

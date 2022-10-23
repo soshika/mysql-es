@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # print(cursor.rowcount, "record inserted.")
 
 
-    cursor.execute("SELECT * FROM users WHERE is_admin=1;")
+    cursor.execute("SELECT * FROM users WHERE is_admin=1 LIMIT 10;")
 
     users = cursor.fetchall()
 

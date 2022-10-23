@@ -2,7 +2,8 @@ from faker import Faker
 import mysql.connector
 
 mydb = mysql.connector.connect(
-  host="fastmovie.online:3306",
+  host="localhost",
+  port=3306,
   user="root",
   password="HackMeIfYouCan@37HahA"
 )

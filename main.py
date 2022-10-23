@@ -1,7 +1,7 @@
 from faker import Faker
 import mysql.connector
 
-mydb = mysql.connector.connect(
+db = mysql.connector.connect(
   host="localhost",
   port=3306,
   user="root",
@@ -9,10 +9,29 @@ mydb = mysql.connector.connect(
   database="blogs"
 )
 
-
-
 if __name__ == "__main__":
-    print(mydb)
+    
+    cursor = db.cursor()
+    # sql = "SELECT * FROM users ;"
+    # val = ("John", "Highway 21")
+    # cursor.execute(sql, val)
+
+    # db.commit()
+
+    # print(cursor.rowcount, "record inserted.")
+
+
+    cursor.execute("SELECT * FROM users")
+
+    users = cursor.fetchall()
+
+    for user in users:
+        print(user)
+
+
+
+
+
     # fake = Faker('fa_IR')
     # name = fake.name()
     # address = fake.address()

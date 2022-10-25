@@ -1,5 +1,6 @@
 import pika
 import time
+import json
 
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(host='localhost'))
@@ -11,10 +12,10 @@ print(' [*] Waiting for messages. To exit press CTRL+C')
 
 def callback(ch, method, properties, body):
     print(" [x] Received %r" % body)
-    # time.sleep(body.count(b'.'))
-    print(type(body))
-    return
-    time.sleep(3)
+    json_body = json.loads(str(body, 'utf-8'))
+    print(json_body)
+    return 
+    time.sleep(1)
     print(" [x] Done")
     ch.basic_ack(delivery_tag=method.delivery_tag)
 

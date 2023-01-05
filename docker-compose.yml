@@ -6,6 +6,7 @@ services:
       - "5672:5672"
       - "15672:15672"
   rabbitmq-consume:
+    restart: always
     build: .
     command: python rabbitmq-consume.py
     depends_on:

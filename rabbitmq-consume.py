@@ -1,39 +1,53 @@
 import pika
-import time
 import json
 import requests
 
 
-connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost'))
-channel = connection.channel()
+# variables goes here ...
+###########################
 
-channel.queue_declare(queue='test', durable=True)
-print(' [*] Waiting for messages. To exit press CTRL+C')
+API_METHOD = 'POST'
+QUEUE_NAME = 'maxwell-queue'
+RABBIT_MQ_HOST = 'localhost'
+API_URL = 'http://fastmovie.online:9091/es'
 
+###########################
+
+
+# function goes here ...
+###########################
 
 def req(body):
-    url = "http://fastmovie.online:9091/es"
+    url = API_URL
     payload = json.dumps(body)
     headers = {
-    'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
     }
 
-    response = requests.request("POST", url, headers=headers, data=payload)
+    response = requests.request(API_METHOD, url, headers=headers, data=payload)
 
-    print(response.text)
+    from pprint import pprint
+    pprint(response)
 
 
 def callback(ch, method, properties, body):
-    print(" [x] Received %r" % body)
     json_body = json.loads(str(body, 'utf-8'))
     req(json_body)
-    time.sleep(1)
-    print(" [x] Done")
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-channel.basic_qos(prefetch_count=1)
-channel.basic_consume(queue='test', on_message_callback=callback)
+###########################
 
-channel.start_consuming()
+
+if __name__ == '__main__':
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters(host=RABBIT_MQ_HOST))
+    channel = connection.channel()
+
+    channel.queue_declare(queue=QUEUE_NAME, durable=True)
+    print(' [*] Waiting for messages. To exit press CTRL+C')
+
+    channel.basic_qos(prefetch_count=1)
+    channel.basic_consume(queue=QUEUE_NAME, on_message_callback=callback)
+
+    channel.start_consuming()
